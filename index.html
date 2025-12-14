@@ -267,6 +267,10 @@
         <h2 class="title is-3">General Overview</h2>
 
         <div class="content has-text-justified">
+          <p style="border-left: 3px solid #dbdbdb; padding-left: 1em; color: #363636; font-weight: 500; font-size: 1.1em;">Novelty: Compared to the state-of-the-art methods/systems/datasets, how novel is your approach? Is your work publishable?</p>
+          <p>Our work diverges from traditional alignment methods that primarily rely on Supervised Fine-Tuning (SFT) or binary safety rewards to enforce generic refusal. The core novelty of our RLVR framework lies in treating "clarification" not as a simple linguistic pattern, but as a verifiable reasoning objective. We uniquely employ Group Relative Policy Optimization (GRPO) driven by a hierarchical split-incentive mechanism (0.3 for refusal, 0.7 for verified clarification). By strictly verifying mathematical correctness via symbolic execution and clarification logic via an LLM-as-judge, we effectively transform "unanswerability" from a static safety constraint into an explicit, learnable reasoning task, bridging the gap between rigorous reasoning and helpful alignment.</p>
+          <p>This work is highly publishable as it rigorously addresses the "Hallucination Tax" by transforming "unanswerability" into a verifiable reasoning task via our novel RLVR framework. Validated by strict evaluation protocols, our methodology offers a significant technical contribution to the field of reliable LLM alignment.</p>
+
           <p style="border-left: 3px solid #dbdbdb; padding-left: 1em; color: #363636; font-weight: 500; font-size: 1.1em;">Significance: How storng is your result? Is your finding still holding if different setups or prompting tricks?</p>
           <p>Our results demonstrate strong robustness to experimental variability. To mitigate the inherent stochasticity of language model generation, we adopt a controlled evaluation protocol: instead of relying on a single inference pass, we perform five independent rollouts for each model under identical instructions and report the averaged performance. This procedure reduces the influence of random effects.</p>
           <p>We further examine the robustness of our findings through a sensitivity analysis of the evaluation metric based on an LLM-as-judge. Specifically, we evaluate models using prompts with varying levels of strictness. Across all evaluation settings, our proposed model, Abstain-R1, consistently outperforms other models in the quality of refusal rationales.</p>
@@ -367,7 +371,7 @@
           Initially, we relied on exact string matching to evaluate answer correctness. This proved too rigid for mathematical tasks (e.g., rejecting "1/2" when the target was "0.5"), generating false negatives that confused the policy optimizer and destabilized training. <em style="color: #2c5282;">We resolved this by integrating the <a href="https://github.com/huggingface/Math-Verify" target="_blank">Math-Verify</a> library for symbolic comparison, ensuring the reward signal reflected genuine mathematical understanding rather than formatting luck.</em></li>
           
           <li><strong>Infrastructure and Throughput Bottlenecks</strong><br>
-          We faced substantial computational hurdles. First, the standard HuggingFace generation loop was too slow for the extensive group sampling required by GRPO. <em style="color: #2c5282;">We migrated our rollout backend to <a href="https://docs.vllm.ai/en/latest/" target="_blank">vLLM</a>, which dramatically improved inference throughput.</em> Second, due to limited institutional compute resources (MSI), we experienced severe delays. <em style="color: #2c5282;">We ultimately mitigated this by migrating our training workload to external rented A100 GPU clusters to ensure timely convergence.</em></li>
+          We faced substantial computational hurdles. First, the standard HuggingFace generation loop was too slow for the extensive group sampling required by GRPO. <em style="color: #2c5282;">We migrated our rollout backend to <a href="https://docs.vllm.ai/en/latest/" target="_blank">vLLM</a>, which dramatically improved inference throughput.</em></li>
           
           <li><strong>Resource Constraints in Evaluation</strong><br>
           Running a large LLM-as-a-Judge alongside the policy model caused frequent Out-of-Memory (OOM) errors and slowed down the reward computation loop. <em style="color: #2c5282;">We experimented with various judge models and ultimately selected <a href="https://huggingface.co/IAAR-Shanghai/xVerify-3B-Ia" target="_blank">xVerify-3B</a>, a specialized lightweight verifier. This choice struck the optimal balance between judging accuracy and memory efficiency, allowing us to maintain a large batch size during training without OOM crashes.</em></li>
@@ -379,34 +383,63 @@
 
   <hr style="margin: 2rem 0; border: none; border-top: 1px solid #dbdbdb;">
 
+  <!-- Results -->
+  <div class="columns is-centered">
+    <div class="column is-full-width">
+      <h2 class="title is-3">Results</h2>
+
+      <div class="content has-text-justified">
+
+        <figure class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="static/images/results.jpg" alt="Results Table" style="max-width: 100%; height: auto;">
+          <figcaption style="margin-top: 0.75rem; font-size: 0.95rem; color: #4a4a4a;">
+            <strong>Results on ABSTAIN-TEST-SUM evaluated by strict protocol.</strong> Models marked with * use the V1 model instruction, models without * use the V2 model instruction. Bold indicates the best performance in each column.
+          </figcaption>
+        </figure>
+
+        <figure class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="static/images/15291765691042_.pic.jpg" alt="Results Table Permissive" style="max-width: 100%; height: auto;">
+          <figcaption style="margin-top: 0.75rem; font-size: 0.95rem; color: #4a4a4a;">
+            <strong>Results on ABSTAIN-TEST-SUM evaluated by permissive protocol.</strong> Models marked with * use the V1 model instruction; models without * use the V2 model instruction. Bold indicates the best performance in each column.
+          </figcaption>
+        </figure>
+
+        <p>
+          Our method, <strong>Abstain-R1</strong> (based on Qwen2.5-3B), demonstrates that rigorous reinforcement learning can effectively solve the "Hallucination Tax" without compromising reasoning capabilities. Despite its compact size, Abstain-R1 achieves clarification and refusal performance comparable to—and in some cases exceeding—much larger proprietary reasoning models.
+        </p>
+
+        <h3 class="title is-4" style="margin-top: 1.5rem;">Key Performance Highlights</h3>
+
+        <p>
+          <strong>Zero False Refusals on Solvable Queries:</strong> Abstain-R1 achieves a <strong>0.0% False Unknown rate (A-FU)</strong> on answerable queries. This proves that our "strict negative penalty" mechanism successfully prevents the model from becoming "lazy" or overly conservative—a common failure mode in safety-aligned models.
+        </p>
+
+        <p>
+          <strong>Competitive Mathematical Accuracy:</strong> While gaining the ability to refuse, the model maintains a strong <strong>61.4% Accuracy (A-Acc)</strong> on answerable mathematical tasks, remaining highly competitive within the open-source 3B parameter family.
+        </p>
+
+        <p>
+          <strong>Surpassing Larger Reasoning Models:</strong> On unanswerable queries, Abstain-R1 delivers meaningful clarifications that outperform specialized reasoning models.
+        </p>
+
+        <ul>
+          <li><strong>Vs. DeepSeek Reason:</strong> We achieve notably stronger performance (U-Ref 51.7% vs. 45.1%; U-Clar 50.0% vs. 43.7%).</li>
+          <li><strong>Vs. GPT-5.1 Reasoning Medium:</strong> We achieve comparable performance (U-Ref 51.7% vs. 50.7%; U-Clar 50.0% vs. 48.2%), demonstrating that efficient RLVR can bridge the gap between small open-source models and proprietary giants.</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 2rem 0; border: none; border-top: 1px solid #dbdbdb;">
+
   
 </section>
 
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{park2021nerfies,
-  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
-  title     = {Nerfies: Deformable Neural Radiance Fields},
-  journal   = {ICCV},
-  year      = {2021},
-}</code></pre>
-  </div>
-</section>
-
 
 <footer class="footer">
   <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
     <div class="columns is-centered">
       <div class="column is-8">
         <div class="content">
