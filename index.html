@@ -37,18 +37,11 @@
         rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/favicon.svg">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
 <body>
@@ -73,15 +66,14 @@
           <h1 class="title is-1 publication-title">Abstain-R1: absent recognition and calibration in Post-Training of LLMs</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a >Haotian Zhai</a><sup>1</sup>,</span>
+              <a href="https://zhaihaotian.github.io" target="_blank" rel="noopener noreferrer">Haotian Zhai</a><sup>1</sup>,</span>
             <span class="author-block">
-              <a >Jingcheng Liang</a><sup>1</sup>,</span>
+              <span>Jingcheng Liang</span><sup>1</sup>,</span>
+            <span class="author-block">
+              <span>Haotian Huang</span><sup>1</sup>,
             </span>
             <span class="author-block">
-              <a >Haotian Huang</a><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a >Zekang Li</a><sup>1</sup>
+              <span>Zekang Li</span><sup>1</sup>
             </span>
           </div>
 
@@ -93,12 +85,12 @@
             <div class="publication-links">
               <!-- PDF Link. -->
               <span class="link-block">
-                <a href="https://leo-leung04.github.io/Abstain-R1-Web/CSCI_5541_Proposal_Report (7).pdf"
+                <a href="https://huggingface.co/collections/zhaihaotian/abstain-test-and-abstain-cot"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fas fa-file-pdf"></i>
                   </span>
-                  <span>Report</span>
+                  <span>Dataset</span>
                 </a>
               </span>
               <!-- Code Link. -->
@@ -119,7 +111,8 @@
                       <i class="far fa-images"></i>
                   </span>
                   <span>Model</span>
-                  </a>
+                </a>
+              </span>
             </div>
 
           </div>
@@ -128,81 +121,6 @@
     </div>
   </div>
 </section>
-<!-- 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
-      </h2>
-    </div>
-  </div>
-</section> -->
-
-<!-- 
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 
 <section class="section">
   <div class="container is-max-desktop">
@@ -231,9 +149,12 @@
             format adherence, and the semantic quality of clarifications.
           </p>
           <p>
-            Experiments show that our method significantly reduces guessing and hallucinations,
-            improves calibrated abstention with informative clarifications,
-            and maintains strong performance on answerable queries.
+            Experimental results show that, de-
+            spite being a 3B-parameter model, Abstain-R1
+            achieves performance comparable to GPT-5 in
+            terms of false-unknown rate, refusal calibra-
+            tion, and clarification quality, while maintain-
+            ing strong performance on answerable queries.
           </p>
         </div>
       </div>
@@ -404,8 +325,16 @@
           </figcaption>
         </figure>
 
+        <figure class="has-text-centered" style="margin-bottom: 1.5rem;">
+          <img src="static/images/result_wosum.jpg" alt="Results Table Permissive" style="max-width: 100%; height: auto;">
+          <figcaption style="margin-top: 0.75rem; font-size: 0.95rem; color: #4a4a4a;">
+            <strong>Results on ABSTAIN-TEST-w/o SUM evaluated by permissive protocol.</strong> All models used the V2 model instruction. Bold indicates the best performance in each column. Because general-domain datasets tend to be slightly less challenging than math-focused benchmarks like SUM, producing an abstention signal may be relatively easier. However, for the untrained Qwen2.5-3B-Instruct model, generating high-quality clarifications remains a significant challenge.
+          </figcaption>
+        </figure>
+
+
         <p>
-          Our method, <strong>Abstain-R1</strong> (based on Qwen2.5-3B), demonstrates that rigorous reinforcement learning can effectively solve the "Hallucination Tax" without compromising reasoning capabilities. Despite its compact size, Abstain-R1 achieves clarification and refusal performance comparable to—and in some cases exceeding—much larger proprietary reasoning models.
+          Our method, <strong>Abstain-R1</strong> (based on Qwen2.5-3B-Instruct), demonstrates that rigorous reinforcement learning can effectively solve the "Hallucination Tax" without compromising reasoning capabilities. Despite its compact size, Abstain-R1 achieves clarification and refusal performance comparable to—and in some cases exceeding—much larger proprietary reasoning models.
         </p>
 
         <h3 class="title is-4" style="margin-top: 1.5rem;">Key Performance Highlights</h3>
